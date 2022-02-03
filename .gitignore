@@ -1,0 +1,9 @@
+# build
+/build
+/bin
+
+# output
+/out
+
+# VS Code
+/.vscode
