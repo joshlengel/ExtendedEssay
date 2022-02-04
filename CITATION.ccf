@@ -1,0 +1,8 @@
+cff-version: 1.0.0
+message: "If you use this software, please cite it as below."
+authors:
+  - family-names: Lengel
+    given-names: Josh
+title: "Rocket Flight Simulator for Extended Essay"
+version: 1.0.0
+date-released: 2022-02-04
