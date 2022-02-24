@@ -21,7 +21,6 @@ public:
     Body(const std::string &name, const Vec3 &position, const Vec3 &velocity, double mu);
     Body(const std::string &name, double et);
 
-    void Integrate(double dt);
     void Output(nlohmann::json &json) const;
 };
 

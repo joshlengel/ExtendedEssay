@@ -30,12 +30,6 @@ Body::Body(const std::string &name, double et):
     GetEphemeris(name.c_str(), et, position, velocity);
 }
 
-void Body::Integrate(double dt)
-{
-    velocity += acceleration * dt;
-    position += velocity * dt;
-}
-
 void Body::Output(nlohmann::json &json) const
 {
     nlohmann::json &dst = json["bodies"][name]["ephemerides"];

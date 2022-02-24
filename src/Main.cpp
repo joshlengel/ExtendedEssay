@@ -49,7 +49,7 @@ int main()
     GetEphemeris("Mars Barycenter", T_EXIT, mars_exit_position, mars_exit_velocity);
 
     Vec3 v1, v2;
-    LambertUV(solar_system.earth.position - solar_system.sun.position, mars_exit_position - solar_system.sun.position, T_EXIT - T_INJECT, solar_system.sun.mu, v1, v2);
+    LambertDIzzo(solar_system.earth.position - solar_system.sun.position, mars_exit_position - solar_system.sun.position, T_EXIT - T_INJECT, solar_system.sun.mu, v1, v2);
     Vec3 v_inject = v1 + solar_system.sun.velocity - solar_system.earth.velocity;
     Vec3 v_exit = mars_exit_velocity - (v2 + solar_system.sun.velocity);
     double C3_e = Vec3::Dot(v_inject, v_inject);
@@ -64,15 +64,12 @@ int main()
     Vec3 x_n = Vec3::Normalize(Vec3::Cross(n_earth, v_n));
     Vec3 x_i = x_n * r_leo + solar_system.earth.position;
 
-    std::cout << "v_n: (" << v_n.x << ", " << v_n.y << ", " << v_n.z << ")" << std::endl;
-    std::cout << "x_n: (" << x_n.x << ", " << x_n.y << ", " << x_n.z << ")" << std::endl;
-
     double rocket_mass = 100000.0;
     Body rocket("Rocket", x_i, v_i, rocket_mass * G);
 
     // Setup output
     double t = T_INJECT;
-    EulerSimulator sim(t, &rocket, solar_system);
+    RK4Simulator sim(t, &rocket, solar_system);
 
     double gamma = 2e-2;
     dst["metadata"]["gamma"] = gamma;
@@ -110,7 +107,7 @@ int main()
             if (fabs(cosa) < 0.005f)
             {
                 exited = true;
-                std::cout << "Exit orbit. Distance to mars: " << sqrt(mars_dist_sqr) << std::endl;
+                std::cout << "Starting capture orbit. Distance to mars: " << sqrt(mars_dist_sqr) << std::endl;
 
                 // Do exit orbit
                 Vec3 nm = Vec3::Normalize(Vec3::Cross(mars_disp, rocket_vel));
@@ -125,7 +122,7 @@ int main()
         }
     }
 
-    std::cout << "Exit orbit. Distance to mars: " << Vec3::Length(rocket.position - solar_system.mars.position) << std::endl;
+    std::cout << "Finished simulation. Distance to mars: " << Vec3::Length(rocket.position - solar_system.mars.position) << std::endl;
 
     // Write dst to file
     std::ofstream out(JSON_OUTPUT_DIR "results.json");

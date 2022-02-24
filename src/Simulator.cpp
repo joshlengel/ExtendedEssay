@@ -4,13 +4,13 @@
 #include<algorithm>
 #include<functional>
 
-EulerSimulator::EulerSimulator(double t, Body *rocket, SolarSystem &solar_system):
+RK4Simulator::RK4Simulator(double t, Body *rocket, SolarSystem &solar_system):
     rocket(rocket),
     solar_system(solar_system),
     t(t)
 {}
 
-void RungeKutta(const std::function<Vec3(double t, const Vec3&)> &f, double &t, Vec3 &x, Vec3 &v, double h)
+void RK4(const std::function<Vec3(double t, const Vec3&)> &f, double &t, Vec3 &x, Vec3 &v, double h)
 {
     double h2 = h * 0.5;
 
@@ -28,7 +28,7 @@ void RungeKutta(const std::function<Vec3(double t, const Vec3&)> &f, double &t, 
     v = v + (l1 + l2 * 2 + l3 * 2 + l4) * (h / 6.0);
 }
 
-void EulerSimulator::Step(double gamma, double &dt)
+void RK4Simulator::Step(double gamma, double &dt)
 {
     auto GetGravity = [this](const Body &body, double t, const Vec3 &x)
     {
@@ -58,7 +58,5 @@ void EulerSimulator::Step(double gamma, double &dt)
     // x' = v
 
     // Runge-Kutta-4 iteration
-    RungeKutta(f, t, rocket->position, rocket->velocity, dt);
-
-    //rocket->Integrate(dt);
+    RK4(f, t, rocket->position, rocket->velocity, dt);
 }

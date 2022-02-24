@@ -7,13 +7,13 @@
 class Body;
 class SolarSystem;
 
-class EulerSimulator
+class RK4Simulator
 {
 public:
     Body *rocket;
     SolarSystem &solar_system;
 
-    EulerSimulator(double t, Body *rocket, SolarSystem &solar_system);
+    RK4Simulator(double t, Body *rocket, SolarSystem &solar_system);
 
     void Step(double gamma, double &dt);
 
